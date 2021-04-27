@@ -59,9 +59,18 @@ def kmpstringmatching(contohstring,contohtext):
 
     return(match)
 
-contohstring = "ham him hem"
-contohtext = "ham him"
-ketemu = kmpstringmatching(contohstring,contohtext)
+
+contohstring = "aku mau 28/04/2021"
+arraystring = contohstring.split(' ')
+
+print(arraystring)
+contohtext = "tucil"
+for i in arraystring:
+    ketemu = kmpstringmatching(i,contohtext)
+    if(ketemu):
+        break
+
+#ketemu = kmpstringmatching(contohstring,contohtext)
 
 if(ketemu == False):
     print("X")

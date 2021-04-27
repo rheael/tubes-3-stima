@@ -1,4 +1,5 @@
 import re
+from datetime import date, timedelta
 
 #from RegularExpression import *
 #from kmpstringmatching import *
@@ -91,7 +92,7 @@ def computefail(pattern):
     return fail
 
 def kmpstringmatching(contohstring,contohtext):
-    '''
+    
     panjangstring = len(contohstring)
     panjangtext = len(contohtext)
 
@@ -123,8 +124,8 @@ def kmpstringmatching(contohstring,contohtext):
     #else:
     #    print("nothing here")
     return(match)
-    '''
-    return True
+    
+    #return True
 
 def readFile(fileName):
         fileObj = open(fileName, "r") 
@@ -343,17 +344,61 @@ def help():
     print("Fitur") #dst
     print("Daftar kata penting")
 
+katapenting=readFile('katapenting.txt')
 def deteksiKataPenting(input):
-    katapenting=readFile('katapenting.txt')
+    #katapenting=readFile('katapenting.txt')
+    #contohstring = "aku mau mau mau mau banget tucil"
+    arraystring = input.split(' ')
+
+    #print(arraystring)
+    #contohtext = "tucil"
+    
+    '''
+    for i in arraystring:
+        ketemu = kmpstringmatching(i,contohtext)
+        if(ketemu):
+            break
+    '''
+
     jenis=None
     for i in katapenting:
-        if(kmpstringmatching(input,i)):
-            jenis=i
+        #print("disini3")
+        print(i)
+        for j in arraystring:
+            #print("disini1")
+            print(j)
+            if(kmpstringmatching(j,i)):
+                print("disini2")
+                jenis=i
+                break
+    return jenis
+
+def carikmpgak(input,sesuatu):
+    #katapenting=readFile('katapenting.txt')
+    #contohstring = "aku mau mau mau mau banget tucil"
+    arraystring = input.split(' ')
+
+    #print(arraystring)
+    #contohtext = "tucil"
+    
+    '''
+    for i in arraystring:
+        ketemu = kmpstringmatching(i,contohtext)
+        if(ketemu):
+            break
+    '''
+
+    jenis=False
+    
+    for j in arraystring:
+        if(kmpstringmatching(j,sesuatu)):
+            jenis=True
             break
     return jenis
 
 def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
     # harus ada topik, harus ada selain stopwords
+
     if (readDate(input)!=None and deteksiKodeKuliah(input)!=None and deteksiKataPenting(input)!=None and kmpstringmatching("aku","aku")==False):
         addTask(readDate(input), deteksiKodeKuliah(input), deteksiKataPenting(input), "hoho")
     else:
@@ -363,23 +408,31 @@ def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
         #tampilkanDeadlines(input)
         #for i in listOfDeadlinesComponent:
         #    print(i)
-        if(kmpstringmatching(input,"kapan")):
-            tugas = deteksiKodeKuliah(input)
-            print(tanyakanDeadline(tugas))
-        elif(kmpstringmatching(input,"diundur")):
+        if(kmpstringmatching(input,"diundur")==True):
+            print("sesuatu bebas")
             tanggalBaru = readDate(input)
             tugas = deteksiKodeKuliah(input)
             perbaharuiTask(tugas,tanggalBaru)
-        elif(kmpstringmatching(input,"selesai")):
+        
+        
+        if(carikmpgak(input,"kapan")):
+            tugas = deteksiKodeKuliah(input)
+            print(tanyakanDeadline(tugas))
+        elif(carikmpgak(input,"diundur")):
+            tanggalBaru = readDate(input)
+            tugas = deteksiKodeKuliah(input)
+            perbaharuiTask(tugas,tanggalBaru)
+        elif(carikmpgak(input,"selesai")):
             tugas = deteksiKodeKuliah(input)
             deleteTask(tugas)
-        elif(kmpstringmatching(input,"bantuan")):
+        elif(carikmpgak(input,"bantuan")):
             help()
-        elif(kmpstringmatching(input,"tampilkan")):
+        elif(carikmpgak(input,"tampilkan")):
             tampilkanDeadlines(input)
         else:
             print("Maaf, pesan tidak dikenali\n")
-    #print(listOfDeadlinesComponent)
+           
+    print(listOfDeadlinesComponent)
  
 def saveDeadlinesComponent() :
     data = listOfDeadlinesComponent
