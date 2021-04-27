@@ -33,10 +33,10 @@ def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
 
 # Menambahkan task baru
 def addTask(tanggal,kode,jenis,topik):
-    input = input("Masukkan task: " )
-    print("[TASK BERHASIL DICATAT]\n")
-    print((ID:1) 14/04/2021 - IF2211 - Tubes - String matching)
-    ID = len(listOfDeadlines)+1
+    #input = input("Masukkan task: " )
+    #print("[TASK BERHASIL DICATAT]\n")
+    #print((ID:1) 14/04/2021 - IF2211 - Tubes - String matching)
+    #ID = len(listOfDeadlines)+1
     tanggal = readDate(input)
     kodematkul = deteksiKodeKuliah(input)
     jenis = re.match(input, "...").group() # semua kata penting
@@ -96,3 +96,4 @@ def deleteTask(tugas):
 def help():
     print("Fitur") #dst
     print("Daftar kata penting")
+    
