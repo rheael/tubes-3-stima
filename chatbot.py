@@ -5,6 +5,9 @@ from werkzeug.utils import secure_filename
 import os
 from flask_bootstrap import Bootstrap
 
+global listOfChat
+listOfChat = []
+
 # App config.
 DEBUG = True
 app = Flask(__name__)
@@ -24,9 +27,16 @@ def open():
 def upload_all():
     if request.method == 'POST':
         name = request.form['name']
+        global listOfChat
+        listOfChat.append(name)
+        x = getChatBotResponse()
+        listOfChat.append(x)
         #print(name)
         #print(kmpstringmatching(name,"IF2211"))
-        return render_template('showmessage.html',name=name)
+        return render_template('showmessage.html',listOfChat=listOfChat)
+
+def getChatBotResponse():
+    return "Contoh"
 
 if __name__ == "__main__":
     app.run(threaded=True)
