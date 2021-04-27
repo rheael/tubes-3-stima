@@ -349,34 +349,17 @@ def deteksiKataPenting(input):
     #katapenting=readFile('katapenting.txt')
     #contohstring = "aku mau mau mau mau banget tucil"
     arraystring = input.split(' ')
-
-    #print(arraystring)
-    #contohtext = "tucil"
-    
-    '''
-    for i in arraystring:
-        ketemu = kmpstringmatching(i,contohtext)
-        if(ketemu):
-            break
-    '''
-
     jenis=None
-    for i in katapenting:
-        #print("disini3")
-        print(i)
-        for j in arraystring:
-            #print("disini1")
-            print(j)
-            if(kmpstringmatching(j,i)):
-                print("disini2")
-                jenis=i
-                break
+    for j in arraystring:
+        if j in katapenting:
+            jenis=True
     return jenis
 
 def carikmpgak(input,sesuatu):
     #katapenting=readFile('katapenting.txt')
     #contohstring = "aku mau mau mau mau banget tucil"
     arraystring = input.split(' ')
+    #print(arraystring)
 
     #print(arraystring)
     #contohtext = "tucil"
@@ -391,10 +374,14 @@ def carikmpgak(input,sesuatu):
     jenis=False
     
     for j in arraystring:
+        #print(j)
+        #print(sesuatu)
         if(kmpstringmatching(j,sesuatu)):
             jenis=True
             break
     return jenis
+
+print(carikmpgak('sesuatu','sesuatu'))
 
 def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
     # harus ada topik, harus ada selain stopwords
@@ -408,14 +395,11 @@ def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
         #tampilkanDeadlines(input)
         #for i in listOfDeadlinesComponent:
         #    print(i)
-        if(kmpstringmatching(input,"diundur")==True):
-            print("sesuatu bebas")
-            tanggalBaru = readDate(input)
-            tugas = deteksiKodeKuliah(input)
-            perbaharuiTask(tugas,tanggalBaru)
-        
-        
-        if(carikmpgak(input,"kapan")):
+        if(carikmpgak(input,"bantuan")):
+            help()
+        elif(carikmpgak(input,"tampilkan")):
+            tampilkanDeadlines(input)
+        elif(carikmpgak(input,"kapan")):
             tugas = deteksiKodeKuliah(input)
             print(tanyakanDeadline(tugas))
         elif(carikmpgak(input,"diundur")):
@@ -425,10 +409,6 @@ def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
         elif(carikmpgak(input,"selesai")):
             tugas = deteksiKodeKuliah(input)
             deleteTask(tugas)
-        elif(carikmpgak(input,"bantuan")):
-            help()
-        elif(carikmpgak(input,"tampilkan")):
-            tampilkanDeadlines(input)
         else:
             print("Maaf, pesan tidak dikenali\n")
            
