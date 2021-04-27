@@ -35,17 +35,33 @@ def deadlineFromNow(N): # N hari kedepan # N minggu kedepan * 7
         if(i[0]==tanggalYangDicari):
             return i
 
+def cariKomponenTahun(date) :
+    return date[6]+date[7]+date[8]+date[9]
+
+def cariKomponenBulan(date) :
+    return date[3] +date[4]
+
+def cariKomponenHari(date) :
+    return date[0]+date[1]
+
 def deadlinesBetween(listOfDeadlines,date1,date2):
-    if(bulan(date1)==bulan(date2)):
-        i = tanggal(date1)
-        while(i<tanggal(date2)):
-            # return listOfDeadlines[i]
-            i=i+1
-    else:
-        if(bulan(date1)-bulan(date2)>0):
-            i = tanggal(date1)
-            while(i<lastDateOf(bulan(date1))):
-                return listOfDeadlines[i]
+    
+        start_date = date(int(cariKomponenTahun(date1)),int(cariKomponenBulan(date1)), int(cariKomponenHari(date1)))   
+        end_date = date(int(cariKomponenTahun(date2)), int(cariKomponenBulan(date2)), int(cariKomponenHari(date2)))   
+        delta = end_date-start_date       
+    
+        the_days = []
+        for i in range(delta.days + 1):
+                day_range = start_date + timedelta(days=i)
+                the_days.append(convert(str(day_range)))
+
+        deadlinesSemuanya=[]
+        for i in listOfDeadlinesComponent:
+            for j in the_days:
+                if(i[0]==j):
+                    deadlinesSemuanya.append(i)
+                             
+        return deadlinesSemuanya  
 
 def readAdaBerapaTanggal(input):
     pattern = re.compile("[0-9]+(\s|/|-)+(((januari|februari|maret|april|mei|juni|juli|agustus|september|november|desember))|[0-9])+(\s|/|-)+[0-9]+[0-9]",re.IGNORECASE)
