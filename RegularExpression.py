@@ -36,6 +36,14 @@ def convert(today_date):
 # inputLain = "Tubes IF2211 String Matching pada 14 April 2021"
 # inputLainLagi = "Halo bot, tolong ingetin kalau ada kuis IF3110 Bab 2 sampai 3 pada 22/04/21"
 
+def readAdaBerapaTanggal(input):
+    pattern = re.compile("[0-9]+(\s|/|-)+(((januari|februari|maret|april|mei|juni|juli|agustus|september|november|desember))|[0-9])+(\s|/|-)+[0-9]+[0-9]",re.IGNORECASE)
+    zTotal = re.finditer(pattern,input)
+    tanggal=[]
+    for x in re.finditer(pattern,input):
+        tanggal.append((x.group()))
+    return tanggal
+
 def readDate(input):
     ## ada 3 pilihan input
     ## 15/04/2021 atau 15-04-2021
@@ -50,10 +58,38 @@ def readDate(input):
     for i in tanggal:
         print(i)
     if(len(tanggal)>0):
-        prosesTanggal(tanggal[0])
+        return prosesTanggal(tanggal[0])
     else:
-        print("Tidak ada tanggal terdeteksi\n")
+        return None
+    #prosesTanggal(tanggal[0])
+    #return tanggal
+    #else:
+    #    print("Tidak ada tanggal terdeteksi\n")
     # kalo len tanggal 2, artinya harus cari deadline antara 2 tanggal, artinya diproses juga tanggal[1], wkwk.
+
+def month_string_to_number(string):
+    m = {
+        'jan': 1,
+        'feb': 2,
+        'mar': 3,
+        'apr':4,
+         'may':5,
+         'jun':6,
+         'jul':7,
+         'aug':8,
+         'sep':9,
+         'oct':10,
+         'nov':11,
+         'dec':12
+        }
+    s = string.strip()[:3].lower()
+
+    try:
+        out = m[s]
+        return out
+    except:
+        raise ValueError('Not a month')
+
 
 # ini sebenernya bisa aja dipisah jadi 3 fungsi buat ngembaliin tanggal, bulan, dan tahun
 def prosesTanggal(tanggal):
@@ -80,7 +116,7 @@ def prosesTanggal(tanggal):
     else:   
         postString = tanggal.split(tanggalDisimpan,2)[1]
         bulanTahun = postString[1:]
-        print(bulanTahun)
+        #print(bulanTahun)
         bulan = ""
         i=0
         while(re.match(re.compile("\d"),bulanTahun[i])):
@@ -88,11 +124,12 @@ def prosesTanggal(tanggal):
             i=i+1
         if(bulan[0]=="0"): # kalo misal ada 0, ignore aja
             bulan=bulan[1:]
-        print(bulan)
+        #print(bulan)
         tahun=bulanTahun.split(bulan,2)[1][1:]
-        print(tahun)
+        #print(tahun)
     if(len(tahun)==2): # tidak ada awalan 20
         tahun = "20" + tahun
+    return str(tanggalDisimpan) + "/" + str(bulan) + "/" + str(tahun)
     '''
     # buat nyimpen deadline dalam bentuk tanggal, bulan, tahun
     deadline = {}
@@ -116,29 +153,6 @@ def cariBerapaMingguAtauHari(input):
 #input = input("Masukkan input: ")
 #cariBerapaMingguAtauHari(input)
 
-def month_string_to_number(string):
-    m = {
-        'jan': 1,
-        'feb': 2,
-        'mar': 3,
-        'apr':4,
-         'may':5,
-         'jun':6,
-         'jul':7,
-         'aug':8,
-         'sep':9,
-         'oct':10,
-         'nov':11,
-         'dec':12
-        }
-    s = string.strip()[:3].lower()
-
-    try:
-        out = m[s]
-        return out
-    except:
-        raise ValueError('Not a month')
-
 def main():
     perintah=""
     while(perintah!="exit"):
@@ -150,19 +164,6 @@ def main():
 
 '''
 # periode waktu tertentu
-
-def deadlinesBetween(listOfDeadlines,date1,date2):
-    if(bulan(date1)==bulan(date2)):
-        i = tanggal(date1)
-        while(i<tanggal(date2)):
-            # return listOfDeadlines[i]
-            i=i+1
-    else:
-        if(bulan(date1)-bulan(date2)>0):
-            i = tanggal(date1)
-            while(i<lastDateOf(bulan(date1))):
-                # return listOfDeadlines[i]
-        else:
 
 # deadline bbrp hari/minggu ke depan
 def deadlineFromNow(N): # N hari kedepan # N minggu kedepan * 7

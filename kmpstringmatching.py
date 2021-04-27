@@ -25,6 +25,7 @@ def computefail(pattern):
 #print(len(contohstring))
 #print(contohstring[2])
 def kmpstringmatching(contohstring,contohtext):
+    
     panjangstring = len(contohstring)
     panjangtext = len(contohtext)
 
