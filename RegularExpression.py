@@ -102,6 +102,20 @@ def prosesTanggal(tanggal):
     return deadline
     '''
 
+def cariBerapaMingguAtauHari(input):
+    if(kmpstringmatching(input,"minggu")):
+        z=re.match(re.compile("[0-9]+\s+minggu"),input)
+        x=re.match(re.compile("[0-9]"),z.group()) # cari angka numerik
+        print(x) # artinya x minggu
+    elif(kmpstringmatching(input,"hari")):
+        z=re.match(re.compile("[0-9]+\s+hari"),input)
+        x=re.match(re.compile("[0-9]"),z.group()) # cari angka numerik
+        print(x) # artinya x hari
+    return x
+
+#input = input("Masukkan input: ")
+#cariBerapaMingguAtauHari(input)
+
 def month_string_to_number(string):
     m = {
         'jan': 1,
@@ -134,8 +148,6 @@ def main():
 
 # def isDeadlineValid(deadline): # buat ngecek tanggal terakhir bulannya bener ga, males tp nanti aja haha
 
-# fitur nyari deadline, tunggu database:
-
 '''
 # periode waktu tertentu
 
@@ -162,4 +174,4 @@ def deadlineToday():
 
 '''
 
-main()
+#main()
