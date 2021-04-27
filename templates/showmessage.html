@@ -1,32 +1,79 @@
 <html>
-    <head>
-        <title> Chatbot </title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
+<head>
+<style>
+body{
+  text-align: center;
+  background-image: url("IMG_2263.jpg");
+  background-size: 1280px 680px;
+  background-repeat: no-repeat;
+}
+h2{
+  margin-top: 40px;
+  font-size: 25px;
+  font-family: courier new;
+  font-weight: bold;
+  width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #4d2600;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 0px;
+}
+h1{
+  margin: 0px;
+  font-size: 40px;
+  font-family: courier new;
+  font-weight: bold;
+  margin-left: auto;
+  margin-right: auto;
+  color: #4d2600;
+  font-weight: bold;
+  text-align: center;
+}
+p{
+  margin: 0px;
+  font-family: courier new;
+  margin-left: auto;
+  margin-right: auto;
+  color: #4d2600;
+  text-align: center;
+}
+input[type=text] {
+  width: 325px;
+  padding: 10px 10px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+}
+input[type=submit] {
+  width: 75px;
+  padding: 10px 10px;
+  box-sizing: border-box;
+  border-radius: 15px 15px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+</head>
 
-    <br><br>
+<body>
+<h2> Hey</h2>
+<h1>Remember!</h1><br>
+<form action="" method="post" role="form">
+<p> - A friendly reminder costumize just for you - </p><br>
+<input type="text" id="name" class="form-control" name="name" placeholder="Input command here" size="40">
+<button type="submit" class="btn btn-success" value="Submit"></button>
+{% for i in listOfChat %}
+<div>
+    {{ i }}
+</div>
+{% endfor %}
 
-    <body>
-        <div class="container">
-        <center><h2>Chatbot</h2>
-        <form action="" method="post" role="form">
-            <div class="row align-items-center justify-content-center">
-            <div class="form-inline">
-            <center>
-                <input type="text" class="form-control" id="name" name="name" placeholder="Masukkan chat anda" size="75">
-                <button type="submit" class="btn btn-success">Send</button>
-            </center>
-            {% for i in listOfChat %}
-            <div>
-                {{ i }}
-            </div>
-            {% endfor %}
-            </div></div>
-        </form>
+</div></div>
+</form>
+</body>
 
-        </div>
-    </body> </center>
-
-    <br><br><br>
 </html>
-

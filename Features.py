@@ -7,7 +7,7 @@ import re
 # Harus diintegrasikan sama penyimpanan data
 
 def deteksiKodeKuliah(input):
-    z = re.match(re.compile("IF+[0-9]+[0-9]+[0-9]+[0-9]"),input)
+    z = re.match(re.compile("[A-Z]+[A-Z]+[0-9]+[0-9]+[0-9]+[0-9]"),input)
     print(z)
     return (z.group())
 
