@@ -31,6 +31,7 @@ def upload_all():
         listOfChat.append(name)
         x = getChatBotResponse()
         listOfChat.append(x)
+        length = len(listOfChat)
         #print(name)
         #print(kmpstringmatching(name,"IF2211"))
         return render_template('showmessage.html',listOfChat=listOfChat)
