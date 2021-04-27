@@ -399,14 +399,14 @@ def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
             help()
         elif(carikmpgak(input,"tampilkan")):
             tampilkanDeadlines(input)
-        elif(carikmpgak(input,"kapan")):
+        elif(deteksiKodeKuliah(input)!=None and carikmpgak(input,"kapan")):
             tugas = deteksiKodeKuliah(input)
             print(tanyakanDeadline(tugas))
-        elif(carikmpgak(input,"diundur")):
+        elif(deteksiKodeKuliah(input)!=None and carikmpgak(input,"diundur")):
             tanggalBaru = readDate(input)
             tugas = deteksiKodeKuliah(input)
             perbaharuiTask(tugas,tanggalBaru)
-        elif(carikmpgak(input,"selesai")):
+        elif(deteksiKodeKuliah(input)!=None and carikmpgak(input,"selesai")):
             tugas = deteksiKodeKuliah(input)
             deleteTask(tugas)
         else:
