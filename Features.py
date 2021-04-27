@@ -6,9 +6,46 @@ import re
 # BARU GAMBARAN
 # Harus diintegrasikan sama penyimpanan data
 
+
+def convert(today_date):
+    # ubah jadi sistem
+    tahun = ""
+    bulan = ""
+    tanggal = ""
+    i = 0
+    while(i<=3):
+        tahun = tahun + str(today_date)[i]
+        i=i+1
+    i=i+1
+    while(i<=6):
+        bulan = bulan + str(today_date)[i]
+        i=i+1
+    i=i+1
+    while(i<=9):
+        tanggal = tanggal + str(today_date)[i]
+        i=i+1
+    today_dateConverted= tanggal + "/" + bulan + "/" + tahun
+    return today_dateConverted
+
 def deadlineFromNow(N): # N hari kedepan # N minggu kedepan * 7
     #return listOfDeadlines[today+N]
-    return True
+    Enddate = date.today() + timedelta(days=N)
+    tanggalYangDicari = convert(Enddate)
+    for i in listOfDeadlinesComponent:
+        if(i[0]==tanggalYangDicari):
+            return i
+
+def deadlinesBetween(listOfDeadlines,date1,date2):
+    if(bulan(date1)==bulan(date2)):
+        i = tanggal(date1)
+        while(i<tanggal(date2)):
+            # return listOfDeadlines[i]
+            i=i+1
+    else:
+        if(bulan(date1)-bulan(date2)>0):
+            i = tanggal(date1)
+            while(i<lastDateOf(bulan(date1))):
+                return listOfDeadlines[i]
 
 def readAdaBerapaTanggal(input):
     pattern = re.compile("[0-9]+(\s|/|-)+(((januari|februari|maret|april|mei|juni|juli|agustus|september|november|desember))|[0-9])+(\s|/|-)+[0-9]+[0-9]",re.IGNORECASE)
@@ -37,8 +74,8 @@ def computefail(pattern):
 
     return fail
 
-
 def kmpstringmatching(contohstring,contohtext):
+    '''
     panjangstring = len(contohstring)
     panjangtext = len(contohtext)
 
@@ -70,7 +107,8 @@ def kmpstringmatching(contohstring,contohtext):
     #else:
     #    print("nothing here")
     return(match)
-    #return True
+    '''
+    return True
 
 def readFile(fileName):
         fileObj = open(fileName, "r") 
@@ -217,23 +255,25 @@ def addTask(tanggal,kode,jenis,topik):
         f.write(data_deadline)
 
 def tampilkanSeluruhDeadline():
-    for i in listOfDeadlines:
+    for i in listOfDeadlinesComponent:
         print(i)
     
 def tampilkanDeadlines(input):
-        if readDate(input)!=None: # kalo misalnya ga ada tanggal
+        if readDate(input)==None: # kalo misalnya ga ada tanggal
             tampilkanSeluruhDeadline()
         else:
             if(len(readAdaBerapaTanggal(input))==2):
-                x=readAdaBerapaTanggal()
+                x=readAdaBerapaTanggal(input)
                 deadlinesBetween(listOfDeadlines,x[0],x[1])
             else:
                 if (kmpstringmatching(input,"minggu")):
                    jumlahMinggu = cariBerapaMingguAtauHari(input)
-                   deadlineFromNow(jumlahMinggu*7)
+                   if(jumlahMinggu!=None):
+                       deadlineFromNow(jumlahMinggu*7)
                 elif (kmpstringmatching(input,"hari")):
                    jumlahHari = cariBerapaMingguAtauHari(input)
-                   deadlineFromNow(jumlahHari)
+                   if(jumlahMinggu!=None):
+                       deadlineFromNow(jumlahHari)
 
 def cariBerapaMingguAtauHari(input):
     if(kmpstringmatching(input,"minggu")):
@@ -252,18 +292,6 @@ def cariBerapaMingguAtauHari(input):
         print(x) # artinya x hari
     return x
 
-def deadlinesBetween(listOfDeadlines,date1,date2):
-    if(bulan(date1)==bulan(date2)):
-        i = tanggal(date1)
-        while(i<tanggal(date2)):
-            # return listOfDeadlines[i]
-            i=i+1
-    else:
-        if(bulan(date1)-bulan(date2)>0):
-            i = tanggal(date1)
-            while(i<lastDateOf(bulan(date1))):
-                return listOfDeadlines[i]
-    
 # Berdasarkan jenis task
 # cari tanggal/waktu (contoh: 3 minggu, 3 hari)
  # artinya kata penting lagi minggu sama hari
@@ -316,8 +344,9 @@ def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
         #tugas = deteksiKodeKuliah(input)
         #print(tugas)
         #tampilkanDeadlines(input)
-        for i in listOfDeadlinesComponent:
-            print(i)
+        #tampilkanDeadlines(input)
+        #for i in listOfDeadlinesComponent:
+        #    print(i)
         if(kmpstringmatching(input,"kapan")):
             tugas = deteksiKodeKuliah(input)
             print(tanyakanDeadline(tugas))
@@ -334,8 +363,7 @@ def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
             tampilkanDeadlines(input)
         else:
             print("Maaf, pesan tidak dikenali\n")
-    print(listOfDeadlinesComponent)
-
+    #print(listOfDeadlinesComponent)
 
 input = input("Masukkan input: ")
 pilihanInput(input)

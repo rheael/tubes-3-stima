@@ -122,8 +122,9 @@ def prosesTanggal(tanggal):
         while(re.match(re.compile("\d"),bulanTahun[i])):
             bulan = bulan+bulanTahun[i]
             i=i+1
-        if(bulan[0]=="0"): # kalo misal ada 0, ignore aja
-            bulan=bulan[1:]
+        ############################# ZONA BERBAHAYA ######################################
+        #if(bulan[0]=="0"): # kalo misal ada 0, ignore aja
+        #    bulan=bulan[1:]
         #print(bulan)
         tahun=bulanTahun.split(bulan,2)[1][1:]
         #print(tahun)

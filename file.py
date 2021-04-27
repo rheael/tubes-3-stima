@@ -1,4 +1,7 @@
 import re
+from datetime import datetime
+from datetime import timedelta
+from datetime import date
 
 def readFile(fileName):
         fileObj = open(fileName, "r") 
@@ -19,3 +22,4 @@ for i in listOfDeadlines:
         listOfDeadlinesComponent.append(i.split(" "))
 
 print(listOfDeadlinesComponent)
+  
