@@ -380,6 +380,12 @@ def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
         else:
             print("Maaf, pesan tidak dikenali\n")
     #print(listOfDeadlinesComponent)
+ 
+def saveDeadlinesComponent() :
+    data = listOfDeadlinesComponent
+    with open("deadline.txt", "w") as txt_file:
+        for line in data:
+            txt_file.write(" ".join(line) + "\n")
 
 input = input("Masukkan input: ")
 pilihanInput(input)
