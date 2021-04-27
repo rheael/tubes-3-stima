@@ -22,6 +22,7 @@ def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
         tugas = deteksiKodeKuliah(input)
         perbaharuiTask(tugas)
     elif(kmpstringmatching(input,"selesai")):
+        tugas = deteksiKodeKuliah(input)
         deleteTask(tugas)
     elif(kmpstringmatching(input,"help")):
         help()
@@ -29,7 +30,6 @@ def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
         tampilkanDeadlines()
     else:
         print("Maaf, pesan tidak dikenali\n")
-
 
 # Menambahkan task baru
 def addTask(tanggal,kode,jenis,topik):

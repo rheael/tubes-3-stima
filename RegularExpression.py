@@ -105,11 +105,11 @@ def prosesTanggal(tanggal):
 def cariBerapaMingguAtauHari(input):
     if(kmpstringmatching(input,"minggu")):
         z=re.match(re.compile("[0-9]+\s+minggu"),input)
-        x=re.match(re.compile("[0-9]"),z.group()) # cari angka numerik
+        x=re.match(re.compile("[0-9]"),z.group()).group() # cari angka numerik
         print(x) # artinya x minggu
     elif(kmpstringmatching(input,"hari")):
         z=re.match(re.compile("[0-9]+\s+hari"),input)
-        x=re.match(re.compile("[0-9]"),z.group()) # cari angka numerik
+        x=re.match(re.compile("[0-9]"),z.group()).group() # cari angka numerik
         print(x) # artinya x hari
     return x
 
