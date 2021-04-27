@@ -1,62 +1,6 @@
 <html>
 <head>
-<style>
-body{
-  text-align: center;
-  background-image: url("IMG_2263.jpg");
-  background-size: 1280px 680px;
-  background-repeat: no-repeat;
-}
-h2{
-  margin-top: 40px;
-  font-size: 25px;
-  font-family: courier new;
-  font-weight: bold;
-  width: 400px;
-  margin-left: auto;
-  margin-right: auto;
-  color: #4d2600;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 0px;
-}
-h1{
-  margin: 0px;
-  font-size: 40px;
-  font-family: courier new;
-  font-weight: bold;
-  margin-left: auto;
-  margin-right: auto;
-  color: #4d2600;
-  font-weight: bold;
-  text-align: center;
-}
-p{
-  margin: 0px;
-  font-family: courier new;
-  margin-left: auto;
-  margin-right: auto;
-  color: #4d2600;
-  text-align: center;
-}
-input[type=text] {
-  width: 325px;
-  padding: 10px 10px;
-  margin: 8px 0;
-  box-sizing: border-box;
-  margin-left: auto;
-  margin-right: auto;
-}
-input[type=submit] {
-  width: 75px;
-  padding: 10px 10px;
-  box-sizing: border-box;
-  border-radius: 15px 15px;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='mainstylesheet.css') }}">
 </head>
 
 <body>
@@ -65,11 +9,11 @@ input[type=submit] {
 <form action="" method="post" role="form">
 <p> - A friendly reminder costumize just for you - </p><br>
 <input type="text" id="name" class="form-control" name="name" placeholder="Input command here" size="40">
-<button type="submit" class="btn btn-success" value="Submit"></button>
+<button type="submit" class="btn btn-success">Submit</button>
 {% for i in listOfChat %}
-<div>
+<div class="hasil"><h3 style="background-color: white; padding:10px 10px; margin-left:640px;margin-right:400px">
     {{ i }}
-</div>
+</h3></div>
 {% endfor %}
 
 </div></div>
