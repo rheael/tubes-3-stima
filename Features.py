@@ -1,12 +1,48 @@
 import re
 from datetime import date, timedelta
-
+from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
+# import StopWordRemoverFactory class
+# import Sastrawi package
+from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
 #from RegularExpression import *
 #from kmpstringmatching import *
 
 # BARU GAMBARAN
 # Harus diintegrasikan sama penyimpanan data
 
+# create stemmer
+factory = StemmerFactory()
+stemmer = factory.create_stemmer()
+
+# bikin jadi kata dasar
+def Stem(x):
+    a = stemmer.stem(x)
+    return a
+    # bikin keluar "none"
+
+# ngilangin kata kata ga penting
+def Stopword(x):
+    factory = StopWordRemoverFactory()
+    stopword = factory.create_stop_word_remover()
+    a = stopword.remove(x)
+    return a
+
+# ngegabungin
+def Simplify(x):
+    a = Stopword(x)
+    b = Stem(a)
+    return b
+
+def readFile(fileName):
+        fileObj = open(fileName, "r") 
+        words = fileObj.read().splitlines() 
+        fileObj.close()
+        return words
+
+listOfDeadlines = readFile('deadline.txt')
+listOfDeadlinesComponent = []
+for i in listOfDeadlines:
+        listOfDeadlinesComponent.append(i.split(" "))
 
 def convert(today_date):
     # ubah jadi sistem
@@ -25,7 +61,7 @@ def convert(today_date):
     while(i<=9):
         tanggal = tanggal + str(today_date)[i]
         i=i+1
-    today_dateConverted= tanggal + "/" + bulan + "/" + tahun
+    today_dateConverted= tanggal + " " + bulan + " " + tahun
     return today_dateConverted
 
 def deadlineFromNow(N): # N hari kedepan # N minggu kedepan * 7
@@ -33,7 +69,7 @@ def deadlineFromNow(N): # N hari kedepan # N minggu kedepan * 7
     Enddate = date.today() + timedelta(days=N)
     tanggalYangDicari = convert(Enddate)
     for i in listOfDeadlinesComponent:
-        if(i[0]==tanggalYangDicari):
+        if(i[0] + " " + i[1] + " " + i[2]==tanggalYangDicari):
             return i
 
 def cariKomponenTahun(date) :
@@ -46,7 +82,8 @@ def cariKomponenHari(date) :
     return date[0]+date[1]
 
 def deadlinesBetween(listOfDeadlines,date1,date2):
-    
+        date1=readDate(date1)
+        date2=readDate(date2)
         start_date = date(int(cariKomponenTahun(date1)),int(cariKomponenBulan(date1)), int(cariKomponenHari(date1)))   
         end_date = date(int(cariKomponenTahun(date2)), int(cariKomponenBulan(date2)), int(cariKomponenHari(date2)))   
         delta = end_date-start_date       
@@ -59,10 +96,13 @@ def deadlinesBetween(listOfDeadlines,date1,date2):
         deadlinesSemuanya=[]
         for i in listOfDeadlinesComponent:
             for j in the_days:
-                if(i[0]==j):
+                if(i[0] + " " + i[1] + " " + i[2]==j):
+                    #print(j)
                     deadlinesSemuanya.append(i)
                              
         return deadlinesSemuanya  
+
+#print(deadlinesBetween(listOfDeadlinesComponent,'27 04 2020','27 05 2020'))
 
 def readAdaBerapaTanggal(input):
     pattern = re.compile("[0-9]+(\s|/|-)+(((januari|februari|maret|april|mei|juni|juli|agustus|september|november|desember))|[0-9])+(\s|/|-)+[0-9]+[0-9]",re.IGNORECASE)
@@ -71,6 +111,10 @@ def readAdaBerapaTanggal(input):
     for x in re.finditer(pattern,input):
         tanggal.append((x.group()))
     return tanggal
+
+#readAdaBerapaTanggal("27/04/2020")
+
+#print(readAdaBerapaTanggal('27/04/2020'))
 
 def computefail(pattern):
     panjangpattern = len(pattern)
@@ -127,29 +171,23 @@ def kmpstringmatching(contohstring,contohtext):
     
     #return True
 
-def readFile(fileName):
-        fileObj = open(fileName, "r") 
-        words = fileObj.read().splitlines() 
-        fileObj.close()
-        return words
-
 def month_string_to_number(string):
+    #print(string)
     m = {
-        'jan': 1,
-        'feb': 2,
-        'mar': 3,
-        'apr':4,
-         'may':5,
-         'jun':6,
-         'jul':7,
-         'aug':8,
-         'sep':9,
-         'oct':10,
-         'nov':11,
-         'dec':12
+        'jan': '01',
+        'feb': '02',
+        'mar': '03',
+        'apr':'04',
+         'mei':'05',
+         'jun':'06',
+         'jul':'07',
+         'agu':'08',
+         'sep':'09',
+         'okt':'10',
+         'nov':'11',
+         'des':'12'
         }
     s = string.strip()[:3].lower()
-
     try:
         out = m[s]
         return out
@@ -162,6 +200,10 @@ def prosesTanggal(tanggal):
     tanggalDisimpan = tanggal[0]
     if(re.match(re.compile("\d"),tanggal[1])):
         tanggalDisimpan = tanggalDisimpan + tanggal[1]
+    if(len(tanggalDisimpan)==1):
+        tanggalDisimpan = '0' + tanggalDisimpan
+        tanggal = '0' + tanggal
+    print(tanggalDisimpan)
     # TANGGAL = tanggalDisimpan
     # print(tanggalDisimpan)
     # buat yang dalam huruf
@@ -173,7 +215,7 @@ def prosesTanggal(tanggal):
                 i = 3
         #print(tanggal[i]+tanggal[i+1]+tanggal[i+2])
         bulan = (month_string_to_number(tanggal[i]+tanggal[i+1]+(tanggal[i+2]))) # DAPAT BULANNYA
-        #print(bulan)
+        print(bulan)
         postString = tanggal.split(" ",3)[2] # Asumsi kalau menggunakan format bulan dengan huruf, hanya pake " "
         tahun = ""
         for x in re.finditer(re.compile("\d"),postString):
@@ -188,14 +230,12 @@ def prosesTanggal(tanggal):
         while(re.match(re.compile("\d"),bulanTahun[i])):
             bulan = bulan+bulanTahun[i]
             i=i+1
-        if(bulan[0]=="0"): # kalo misal ada 0, ignore aja
-            bulan=bulan[1:]
         #print(bulan)
         tahun=bulanTahun.split(bulan,2)[1][1:]
         #print(tahun)
     if(len(tahun)==2): # tidak ada awalan 20
         tahun = "20" + tahun
-    return str(tanggalDisimpan) + "/" + str(bulan) + "/" + str(tahun)
+    return str(tanggalDisimpan) + " " + str(bulan) + " " + str(tahun)
     '''
     # buat nyimpen deadline dalam bentuk tanggal, bulan, tahun
     deadline = {}
@@ -204,17 +244,25 @@ def prosesTanggal(tanggal):
     deadline[year]=tahun
     return deadline
     '''
+print(prosesTanggal('3 04 2020'))
 
+'''
 def cariBerapaMingguAtauHari(input):
-    if(kmpstringmatching(input,"minggu")):
-        z=re.match(re.compile("[0-9]+\s+minggu"),input)
-        x=re.match(re.compile("[0-9]"),z.group()).group() # cari angka numerik
-        print(x) # artinya x minggu
-    elif(kmpstringmatching(input,"hari")):
-        z=re.match(re.compile("[0-9]+\s+hari"),input)
-        x=re.match(re.compile("[0-9]"),z.group()).group() # cari angka numerik
-        print(x) # artinya x hari
+    x=None
+    arraystring = input.split(' ')
+    for i in arraystring:
+        if(kmpstringmatching(i,"minggu")):
+            z=re.match(re.compile("[0-9]+\s+minggu"),input)
+            if(z!=None):
+                x=re.match(re.compile("[0-9]"),z.group()).group() # cari angka numerik
+                return x
+        elif(kmpstringmatching(i,"hari")):
+            z=re.match(re.compile("[0-9]+\s+hari"),input)
+            if(z!=None):
+                x=re.match(re.compile("[0-9]"),z.group()).group() # cari angka numerik
+                return x
     return x
+'''
 
 #input = input("Masukkan input: ")
 #cariBerapaMingguAtauHari(input)
@@ -238,6 +286,7 @@ def readDate(input):
     tanggal=[]
     for x in re.finditer(pattern,input):
         tanggal.append((x.group()))
+        #print(tanggal)
     #for i in tanggal:
         #print(i)
     if(len(tanggal)>0):
@@ -250,20 +299,14 @@ def readDate(input):
     #    print("Tidak ada tanggal terdeteksi\n")
     # kalo len tanggal 2, artinya harus cari deadline antara 2 tanggal, artinya diproses juga tanggal[1], wkwk.
 
-
-listOfDeadlines = readFile('deadline.txt')
-listOfDeadlinesComponent = []
-for i in listOfDeadlines:
-        listOfDeadlinesComponent.append(i.split(" "))
+print(readDate('23 05 2020'))
 
 def deteksiKodeKuliah(input):
-    z = re.findall(re.compile("[A-Z]+[A-Z]+[0-9]+[0-9]+[0-9]+[0-9]"),input)
+    z = re.findall(re.compile("[a-z]+[a-z]+[0-9]+[0-9]+[0-9]+[0-9]"),input)
     if(len(z)>0):
         return z[0]
     else:
         return None
-
-#print(deteksiKodeKuliah("Aku benci IF2230"))
 
 # Menambahkan task baru
 def addTask(tanggal,kode,jenis,topik):
@@ -276,66 +319,74 @@ def tampilkanSeluruhDeadline():
         print(i)
     
 def tampilkanDeadlines(input):
-        if readDate(input)==None: # kalo misalnya ga ada tanggal
+        arraystring = input.split(' ')
+        minggu = False
+        hari = False
+        for i in arraystring:
+            if(i=="minggu" or i=="hari"):
+                if(kmpstringmatching(i,"minggu")):
+                    #print(kmpstringmatching(i,"minggu"))
+                    z=re.findall(re.compile("[0-9]+\s+minggu"),input)
+                    if(len(z)>0):
+                        banyakminggu=re.match(re.compile("[0-9]"),z[0]).group() # cari angka numerik
+                        minggu = True
+                        break
+                elif(kmpstringmatching(i,"hari")):
+                    #print(kmpstringmatching(i,"hari"))
+                    z=re.findall(re.compile("[0-9]+\s+hari"),input)
+                    if(len(z)>0):
+                        banyakhari=re.match(re.compile("[0-9]"),z[0]).group() # cari angka numerik
+                        hari = True
+                        break
+        if (readDate(input)==None and minggu==False and hari==False): # kalo misalnya ga ada tanggal
             tampilkanSeluruhDeadline()
         else:
             if(len(readAdaBerapaTanggal(input))==2):
                 x=readAdaBerapaTanggal(input)
-                deadlinesBetween(listOfDeadlines,x[0],x[1])
+                print(deadlinesBetween(listOfDeadlines,x[0],x[1]))
             else:
-                if (kmpstringmatching(input,"minggu")):
-                   jumlahMinggu = cariBerapaMingguAtauHari(input)
-                   if(jumlahMinggu!=None):
-                       deadlineFromNow(jumlahMinggu*7)
-                elif (kmpstringmatching(input,"hari")):
-                   jumlahHari = cariBerapaMingguAtauHari(input)
-                   if(jumlahMinggu!=None):
-                       deadlineFromNow(jumlahHari)
+                if (minggu):
+                   if(banyakminggu!=None):
+                       deadlineFromNow(int(banyakminggu)*7)
+                elif (hari):
+                   if(banyakhari!=None):
+                       deadlineFromNow(int(banyakhari))
+                else:
+                    for i in listOfDeadlinesComponent:
+                        y=readDate(input)
+                        x=readAdaBerapaTanggal(y)
+                        if(i[0]+" "+i[1]+" "+i[2] in x):
+                            print(i)
+                            break
 
-def cariBerapaMingguAtauHari(input):
-    if(kmpstringmatching(input,"minggu")):
-        z=re.match(re.compile("[0-9]+\s+minggu"),input)
-        if(z!=None):
-            x=re.match(re.compile("[0-9]"),z.group()).group() # cari angka numerik
-        else:
-            return None
-        print(x) # artinya x minggu
-    elif(kmpstringmatching(input,"hari")):
-        z=re.match(re.compile("[0-9]+\s+hari"),input)
-        if(z!=None):
-            x=re.match(re.compile("[0-9]"),z.group()).group() # cari angka numerik
-        else:
-            return None
-        print(x) # artinya x hari
-    return x
-
-# Berdasarkan jenis task
-# cari tanggal/waktu (contoh: 3 minggu, 3 hari)
- # artinya kata penting lagi minggu sama hari
-# yuuk dihitung minggu itu berapa, hari itu berapa:)
 
 # Menampilkan deadline suatu task
 def tanyakanDeadline(tugas):
     #print(tugas)
     for i in listOfDeadlinesComponent:
-        if (i[1]==tugas):
-            return i[0]
+        if(i[3].lower()==tugas):
+            return (i[0]+" "+i[1]+" "+i[2])
 
 # tanggal Deadline sesuai penyimpanan
 
 # Memperbaharui task tertentu
 def perbaharuiTask(tugas,tanggalBaru):
+    #print(tanggalBaru)
     tugasAda=False
+    tanggalBaru=tanggalBaru.split(" ")
     for i in listOfDeadlinesComponent:
-        if(i[1]==tugas):
+        if(i[3].lower()==tugas):
             tugasAda = True
-            i[0]=tanggalBaru
+            #print("ada")
+            i[0]=tanggalBaru[0]
+            i[1]=tanggalBaru[1]
+            i[2]=tanggalBaru[2]
             break
 
 # Menandai sudah
 def deleteTask(tugas):
     for i in listOfDeadlinesComponent:
-        if(i[1]==tugas):
+        if(i[3].lower()==tugas):
             listOfDeadlinesComponent.remove(i) # ? wkwk tergantung datanya
             break
 
@@ -363,14 +414,6 @@ def carikmpgak(input,sesuatu):
 
     #print(arraystring)
     #contohtext = "tucil"
-    
-    '''
-    for i in arraystring:
-        ketemu = kmpstringmatching(i,contohtext)
-        if(ketemu):
-            break
-    '''
-
     jenis=False
     
     for j in arraystring:
@@ -381,11 +424,13 @@ def carikmpgak(input,sesuatu):
             break
     return jenis
 
-print(carikmpgak('sesuatu','sesuatu'))
+#print(carikmpgak('sesuatu','sesuatu'))
 
 def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
+    input = Simplify(input)
+    #print(input)
+    #print(input)
     # harus ada topik, harus ada selain stopwords
-
     if (readDate(input)!=None and deteksiKodeKuliah(input)!=None and deteksiKataPenting(input)!=None and kmpstringmatching("aku","aku")==False):
         addTask(readDate(input), deteksiKodeKuliah(input), deteksiKataPenting(input), "hoho")
     else:
@@ -395,14 +440,16 @@ def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
         #tampilkanDeadlines(input)
         #for i in listOfDeadlinesComponent:
         #    print(i)
-        if(carikmpgak(input,"bantuan")):
+        #print(deteksiKodeKuliah)
+        #print(input)
+        if(carikmpgak(input,"bantu")):
             help()
-        elif(carikmpgak(input,"tampilkan")):
+        elif(carikmpgak(input,"tampil")):
             tampilkanDeadlines(input)
         elif(deteksiKodeKuliah(input)!=None and carikmpgak(input,"kapan")):
             tugas = deteksiKodeKuliah(input)
             print(tanyakanDeadline(tugas))
-        elif(deteksiKodeKuliah(input)!=None and carikmpgak(input,"diundur")):
+        elif(deteksiKodeKuliah(input)!=None and carikmpgak(input,"undur")):
             tanggalBaru = readDate(input)
             tugas = deteksiKodeKuliah(input)
             perbaharuiTask(tugas,tanggalBaru)
