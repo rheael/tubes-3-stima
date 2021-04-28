@@ -1,0 +1,17 @@
+string
+matching 
+algoritma 
+greedy 
+brute 
+force 
+branch
+bound 
+dfs
+bfs
+boyer
+moore
+kmp
+bm
+knuth
+morris
+pratt
