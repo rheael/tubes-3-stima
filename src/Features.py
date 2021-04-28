@@ -166,7 +166,6 @@ def prosesTanggal(tanggal):
             if (re.match(re.compile("[A-Z]",re.IGNORECASE),tanggal[3])):
                 i = 3
         bulan = (month_string_to_number(tanggal[i]+tanggal[i+1]+(tanggal[i+2])))
-        print(bulan)
         postString = tanggal.split(" ",3)[2]
         tahun = ""
         for x in re.finditer(re.compile("\d"),postString):
@@ -216,7 +215,6 @@ def addTask(ID, tanggal,kode,jenis,topik):
 def tampilkanSeluruhDeadline():
     deadline = ""
     for i in listOfDeadlinesComponent:
-        #print(i)
         deadline=deadline + str(i) + "\n"
     return deadline
     
@@ -265,26 +263,25 @@ def tampilkanDeadlines(input):
         return "Pesan gagal diproses"
 
 # Menampilkan deadline suatu task
-def tanyakanDeadline(IDdicari):
-    #print(tugas)
+def tanyakanDeadline(kode):
+    semua=[]
     for i in listOfDeadlinesComponent:
-        if(i[0].lower()==IDdicari):
-            return (i[1]+" "+i[2]+" "+i[3])
+        if(i[4].lower()==kode):
+            semua.append((i[1]+" "+i[2]+" "+i[3]))
+    return semua
 
 # Memperbaharui task tertentu
 def perbaharuiTask(IDdicari,tanggalBaru):
     #print(tanggalBaru)
-    tugasAda=False
     tanggalBaru=tanggalBaru.split(" ")
     for i in listOfDeadlinesComponent:
         if(i[0].lower()==IDdicari):
-            tugasAda = True
             #print("ada")
+            print("X")
             i[1]=tanggalBaru[0]
             i[2]=tanggalBaru[1]
             i[3]=tanggalBaru[2]
-            return "List berhasil diperbaharui"
-    return "Pesan gagal"
+    return "Selesai"
 
 # Menandai sudah
 def deleteTask(IDdicari):
@@ -352,14 +349,10 @@ def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
     input = Stopword(input)
     input = input.lower()
     arraystring=input.split(' ')
-    tanggal = False
     IDdibaca=False
     kode=False
     returnValue=""
     for i in arraystring:
-        if readDate(i)!=None:
-            tanggal=True
-            tanggalDibaca=readDate(i)
         if deteksiKodeKuliah(i)!=None:
             kode=True
             kodeDibaca=i
@@ -391,14 +384,18 @@ def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
            return help()
         elif((IDdibaca!=True or kode!=True) and carikmpgak(input,"tampilkan")):
             return tampilkanDeadlines(input)
-        elif(IDdibaca==True and carikmpgak(input,"kapan")):
-            return tanyakanDeadline(IDdicari)
-        elif(IDdibaca==True and tanggal==True and carikmpgak(input,"diundur")):
-            tanggalBaru = tanggalDibaca
-            return perbaharuiTask(IDdicari,tanggalBaru)
+        elif(kode==True and carikmpgak(input,"kapan")):
+            #print(kodeDibaca)
+            return tanyakanDeadline(kodeDibaca)
+        elif(IDdibaca==True and readDate(input)!=None and carikmpgak(input,"diundur")):
+            #print(readDate(input))
+            tanggalDibaca=readDate(input)
+            return perbaharuiTask(IDdicari,tanggalDibaca)
         elif(IDdibaca==True and carikmpgak(input,"selesai")):
             return deleteTask(IDdicari)
     return "GAGAL"
+
+#print(pilihanInput("IF2211 kapan"))
 
 def saveDeadlinesComponent():
     # updating ID
@@ -421,5 +418,3 @@ def saveDeadlinesComponent():
     with open("../test/deadline.txt", "w") as txt_file:
         for line in data:
             txt_file.write(" ".join(line) + "\n")
-
-#print(pilihanInput('tampilkan'))
