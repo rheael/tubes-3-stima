@@ -40,5 +40,9 @@ def upload_all():
 def getChatBotResponse(name):
     return pilihanInput(name)
 
+@app.route('/aboutuschatbot')
+def chatbot():
+    return render_template('aboutuschatbot.html')
+
 if __name__ == "__main__":
     app.run(threaded=True)
