@@ -57,3 +57,10 @@ button[type=submit] {
 h3{
   background-color: white;
 }
+a:visited{
+  color: Black;
+}
+
+a:hover{
+  color: Red;
+}
