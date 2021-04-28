@@ -15,8 +15,8 @@ Semester II Tahun 2020/2021
 - Use `pip` to install following packages:
   - [`Sastrawi`](https://pypi.org/project/Sastrawi/) (Indonesian stemmer).
   - [`Flask`](https://pypi.org/project/Flask/) (API yang digunakan)
-  - ['wtforms'](https://pypi.org/project/WTForms/)
-  - ['werkzeug.utils'](https://pypi.org/project/werkzeug.utils/)
+  - [`wtforms`](https://pypi.org/project/WTForms/)
+  - [`werkzeug.utils`](https://pypi.org/project/werkzeug.utils/)
   
   Contoh pada Windows OS
     ```bash
