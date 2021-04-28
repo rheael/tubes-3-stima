@@ -14,11 +14,13 @@ from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFacto
 factory = StemmerFactory()
 stemmer = factory.create_stemmer()
 
+'''
 # bikin jadi kata dasar
 def Stem(x):
     a = stemmer.stem(x)
     return a
     # bikin keluar "none"
+'''
 
 # ngilangin kata kata ga penting
 def Stopword(x):
@@ -439,8 +441,7 @@ def carikmpgak(input,sesuatu):
 #print(carikmpgak('sesuatu','sesuatu'))
 
 def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
-    input = Simplify(input)
-    #print(input)
+    input = Stopword(input)
     #print(input)
     # harus ada topik, harus ada selain stopwords
     if (readDate(input)!=None and deteksiKodeKuliah(input)!=None and deteksiKataPenting(input)!=None):
@@ -466,7 +467,7 @@ def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
         elif(deteksiKodeKuliah(input)!=None and carikmpgak(input,"kapan")):
             tugas = deteksiKodeKuliah(input)
             return tanyakanDeadline(tugas)
-        elif(deteksiKodeKuliah(input)!=None and carikmpgak(input,"undur")):
+        elif(deteksiKodeKuliah(input)!=None and carikmpgak(input,"undur") and readDate(input)!=None):
             tanggalBaru = readDate(input)
             tugas = deteksiKodeKuliah(input)
             return perbaharuiTask(tugas,tanggalBaru)
