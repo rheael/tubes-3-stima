@@ -430,6 +430,15 @@ def deteksiPerintah(input):
             return valid
     return valid
 
+def deteksiKeywords(input):
+    keywordss=readFile('keywords.txt')
+    arraystringg = input.split(' ')
+    keyword=None
+    for j in arraystringg:
+        if j in keywordss:
+            keyword=j
+    return keyword
+
 def carikmpgak(input,sesuatu):
     #katapenting=readFile('katapenting.txt')
     #contohstring = "aku mau mau mau mau banget tucil"
