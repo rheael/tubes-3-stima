@@ -1,53 +1,23 @@
 import re
 from datetime import date, timedelta
-from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
-# import StopWordRemoverFactory class
-# import Sastrawi package
 from Sastrawi.StopWordRemover.StopWordRemoverFactory import StopWordRemoverFactory
-#from RegularExpression import *
-#from kmpstringmatching import *
 
-# BARU GAMBARAN
-# Harus diintegrasikan sama penyimpanan data
-
-# create stemmer
-factory = StemmerFactory()
-stemmer = factory.create_stemmer()
-
-'''
-# bikin jadi kata dasar
-def Stem(x):
-    a = stemmer.stem(x)
-    return a
-    # bikin keluar "none"
-'''
-
-# ngilangin kata kata ga penting
+# menghapus stopword
 def Stopword(x):
     factory = StopWordRemoverFactory()
     stopword = factory.create_stop_word_remover()
     a = stopword.remove(x)
     return a
 
-# ngegabungin
-def Simplify(x):
-    a = Stopword(x)
-    b = Stem(a)
-    return b
-
+# menjadikan array dari file
 def readFile(fileName):
         fileObj = open(fileName, "r") 
         words = fileObj.read().splitlines() 
         fileObj.close()
         return words
 
-listOfDeadlines = readFile('deadline.txt')
-listOfDeadlinesComponent = []
-for i in listOfDeadlines:
-        listOfDeadlinesComponent.append(i.split(" "))
-
+# date jadi sistem
 def convert(today_date):
-    # ubah jadi sistem
     tahun = ""
     bulan = ""
     tanggal = ""
@@ -66,8 +36,7 @@ def convert(today_date):
     today_dateConverted= tanggal + " " + bulan + " " + tahun
     return today_dateConverted
 
-def deadlineFromNow(N): # N hari kedepan # N minggu kedepan * 7
-    #return listOfDeadlines[today+N]
+def deadlineFromNow(N): 
     Enddate = date.today() + timedelta(days=N)
     tanggalYangDicari = convert(Enddate)
     deadline=""
@@ -90,22 +59,16 @@ def deadlinesBetween(listOfDeadlines,date1,date2):
         start_date = date(int(cariKomponenTahun(date1)),int(cariKomponenBulan(date1)), int(cariKomponenHari(date1)))   
         end_date = date(int(cariKomponenTahun(date2)), int(cariKomponenBulan(date2)), int(cariKomponenHari(date2)))   
         delta = end_date-start_date       
-    
         the_days = []
         for i in range(delta.days + 1):
                 day_range = start_date + timedelta(days=i)
                 the_days.append(convert(str(day_range)))
-
         deadlinesSemuanya=""
         for i in listOfDeadlinesComponent:
             for j in the_days:
                 if(i[0] + " " + i[1] + " " + i[2]==j):
-                    #print(j)
-                    deadlinesSemuanya=deadlinesSemuanya + str(i) + "\n"
-                             
+                    deadlinesSemuanya=deadlinesSemuanya + str(i) + "\n"       
         return deadlinesSemuanya  
-
-#print(deadlinesBetween(listOfDeadlinesComponent,'27 04 2020','27 05 2020'))
 
 def readAdaBerapaTanggal(input):
     pattern = re.compile("[0-9]+(\s|/|-)+(((januari|februari|maret|april|mei|juni|juli|agustus|september|november|desember))|[0-9])+(\s|/|-)+[0-9]+[0-9]",re.IGNORECASE)
@@ -114,10 +77,6 @@ def readAdaBerapaTanggal(input):
     for x in re.finditer(pattern,input):
         tanggal.append((x.group()))
     return tanggal
-
-#readAdaBerapaTanggal("27/04/2020")
-
-#print(readAdaBerapaTanggal('27/04/2020'))
 
 def computefail(pattern):
     panjangpattern = len(pattern)
@@ -151,31 +110,18 @@ def kmpstringmatching(contohstring,contohtext):
     match = False
 
     while(match == False and i<panjangstring):
-        #while(i<panjangstring):
             if(contohtext[j] == contohstring[i]):
                 if(j == panjangtext - 1):
-                    #print(i - panjangtext + 1)
                     match = True
-                    #print("match found")
                 i+=1
                 j+=1
             elif(j >0):
                 j = fail[j-1]
-                #print("disini1")
             else:
                 i+=1
-                #print("disini2")
-
-    #if(match == True):
-    #    print("ketemu :3")
-    #else:
-    #    print("nothing here")
     return(match)
-    
-    #return True
 
 def month_string_to_number(string):
-    #print(string)
     m = {
         'jan': '01',
         'feb': '02',
@@ -197,8 +143,6 @@ def month_string_to_number(string):
     except:
         raise ValueError('Not a month')
 
-
-# ini sebenernya bisa aja dipisah jadi 3 fungsi buat ngembaliin tanggal, bulan, dan tahun
 def prosesTanggal(tanggal):
     tanggalDisimpan = tanggal[0]
     if(re.match(re.compile("\d"),tanggal[1])):
@@ -206,28 +150,21 @@ def prosesTanggal(tanggal):
     if(len(tanggalDisimpan)==1):
         tanggalDisimpan = '0' + tanggalDisimpan
         tanggal = '0' + tanggal
-    #print(tanggalDisimpan)
-    # TANGGAL = tanggalDisimpan
-    # print(tanggalDisimpan)
-    # buat yang dalam huruf
     if(re.match(re.compile("[A-Z]",re.IGNORECASE),tanggal[2]) or (re.match(re.compile("[A-Z]",re.IGNORECASE),tanggal[3]))):
         if(re.match(re.compile("[A-Z]",re.IGNORECASE),tanggal[2])):
             i = 2
         else:
             if (re.match(re.compile("[A-Z]",re.IGNORECASE),tanggal[3])):
                 i = 3
-        #print(tanggal[i]+tanggal[i+1]+tanggal[i+2])
-        bulan = (month_string_to_number(tanggal[i]+tanggal[i+1]+(tanggal[i+2]))) # DAPAT BULANNYA
+        bulan = (month_string_to_number(tanggal[i]+tanggal[i+1]+(tanggal[i+2])))
         print(bulan)
-        postString = tanggal.split(" ",3)[2] # Asumsi kalau menggunakan format bulan dengan huruf, hanya pake " "
+        postString = tanggal.split(" ",3)[2]
         tahun = ""
         for x in re.finditer(re.compile("\d"),postString):
-            tahun=tahun+((x.group())) # DAPAT TAHUNNYA
-        #print(tahun,"Ini tahun")
+            tahun=tahun+((x.group())) 
     else:   
         postString = tanggal.split(tanggalDisimpan,2)[1]
         bulanTahun = postString[1:]
-        #print(bulanTahun)
         bulan = ""
         i=0
         while(re.match(re.compile("\d"),bulanTahun[i])):
@@ -236,76 +173,21 @@ def prosesTanggal(tanggal):
         if(len(bulan)==1):
             bulan = "0"+bulan
             bulanTahun = "0"+bulanTahun
-        #print(bulan)
         tahun=bulanTahun.split(bulan,2)[1][1:]
-        #print(tahun)
     if(len(tahun)==2): # tidak ada awalan 20
         tahun = "20" + tahun
     return str(tanggalDisimpan) + " " + str(bulan) + " " + str(tahun)
-    '''
-    # buat nyimpen deadline dalam bentuk tanggal, bulan, tahun
-    deadline = {}
-    deadline[date]=tanggalDisimpan
-    deadline[month]=bulan
-    deadline[year]=tahun
-    return deadline
-    '''
-#print(prosesTanggal('3 04 2020'))
-
-'''
-def cariBerapaMingguAtauHari(input):
-    x=None
-    arraystring = input.split(' ')
-    for i in arraystring:
-        if(kmpstringmatching(i,"minggu")):
-            z=re.match(re.compile("[0-9]+\s+minggu"),input)
-            if(z!=None):
-                x=re.match(re.compile("[0-9]"),z.group()).group() # cari angka numerik
-                return x
-        elif(kmpstringmatching(i,"hari")):
-            z=re.match(re.compile("[0-9]+\s+hari"),input)
-            if(z!=None):
-                x=re.match(re.compile("[0-9]"),z.group()).group() # cari angka numerik
-                return x
-    return x
-'''
-
-#input = input("Masukkan input: ")
-#cariBerapaMingguAtauHari(input)
-'''
-def main():
-    perintah=""
-    while(perintah!="exit"):
-        perintah = input("Masukkan sesuatu: ")
-        readDate(perintah)
-        perintah = input("Tulis exit untuk keluar:")
-'''
 
 def readDate(input):
-    ## ada 3 pilihan input
-    ## 15/04/2021 atau 15-04-2021
-    ## 14 April 2021
-    ## 22/04/21 atau 22-04-2021
-    #print(input)
     pattern = re.compile("[0-9]+(\s|/|-)+(((januari|februari|maret|april|mei|juni|juli|agustus|september|november|desember))|[0-9])+(\s|/|-)+[0-9]+[0-9]",re.IGNORECASE)
     zTotal = re.finditer(pattern,input)
     tanggal=[]
     for x in re.finditer(pattern,input):
         tanggal.append((x.group()))
-        #print(tanggal)
-    #for i in tanggal:
-        #print(i)
     if(len(tanggal)>0):
         return prosesTanggal(tanggal[0])
     else:
         return None
-    #prosesTanggal(tanggal[0])
-    #return tanggal
-    #else:
-    #    print("Tidak ada tanggal terdeteksi\n")
-    # kalo len tanggal 2, artinya harus cari deadline antara 2 tanggal, artinya diproses juga tanggal[1], wkwk.
-
-#print(readDate('23/05/2020'))
 
 def deteksiKodeKuliah(input):
     z = re.findall(re.compile("[a-z|A-Z]+[a-z|A-Z]+[0-9]+[0-9]+[0-9]+[0-9]"),input)
@@ -314,15 +196,13 @@ def deteksiKodeKuliah(input):
     else:
         return None
 
-# Menambahkan task baru
+# menambahkan task baru
 def addTask(tanggal,kode,jenis,topik):
-    #print(listOfDeadlinesComponent)
     tanggal = tanggal.split(" ")
     data_deadline = []
     data_deadline.append((str(tanggal[0]) + " " + str(tanggal[1]) + " " + str(tanggal[2]) + " " + str(kode) + " " + str(jenis) + " " + str(topik)))
     listOfDeadlinesComponent.append(data_deadline)
     return "Berhasil menambahkan task" + str(listOfDeadlinesComponent)
-    #print(listOfDeadlinesComponent)
 
 def tampilkanSeluruhDeadline():
     deadline = ""
@@ -339,14 +219,12 @@ def tampilkanDeadlines(input):
         for i in arraystring:
             if(i=="minggu" or i=="hari"):
                 if(kmpstringmatching(i,"minggu")):
-                    #print(kmpstringmatching(i,"minggu"))
                     z=re.findall(re.compile("[0-9]+\s+minggu"),input)
                     if(len(z)>0):
                         banyakminggu=re.match(re.compile("[0-9]"),z[0]).group() # cari angka numerik
                         minggu = True
                         break
                 elif(kmpstringmatching(i,"hari")):
-                    #print(kmpstringmatching(i,"hari"))
                     z=re.findall(re.compile("[0-9]+\s+hari"),input)
                     if(len(z)>0):
                         banyakhari=re.match(re.compile("[0-9]"),z[0]).group() # cari angka numerik
@@ -377,16 +255,12 @@ def tampilkanDeadlines(input):
                             return output + str(i)
         return "Pesan gagal diproses"
 
-
-
 # Menampilkan deadline suatu task
 def tanyakanDeadline(tugas):
     #print(tugas)
     for i in listOfDeadlinesComponent:
         if(i[3].lower()==tugas):
             return (i[0]+" "+i[1]+" "+i[2])
-
-# tanggal Deadline sesuai penyimpanan
 
 # Memperbaharui task tertentu
 def perbaharuiTask(tugas,tanggalBaru):
@@ -412,7 +286,7 @@ def deleteTask(tugas):
     return "Pesan gagal"
 
 # Menampilkan opsi help
-def help(katapenting):
+def help():
     output=""
     katapentingstr = ""
     listfitur = " 1. Menambahkan task baru [#katakunci] \r\n 2. Melihat daftar task yang harus dikerjakan [#katakunci] \r\n 3. Menampilkan deadline dari suatu task tertentu [#katakunci]\r\n 4. Memperbaharui task tertentu [#katakunci]\r\n 5. Menandai suatu task sudah selesai [#katakunci] \r\n 6. Menampilkan opsi help [katakunci]\r\n "
@@ -420,12 +294,8 @@ def help(katapenting):
         katapentingstr = katapentingstr + str(i) + "\r\n"
     output="[Fitur] " + "\r\n" + listfitur + "\r\n" + "[Daftar kata penting] " + "\r\n" + katapentingstr
     return output
-    #print(katapenting) 
 
-katapenting=readFile('katapenting.txt')
 def deteksiKataPenting(input):
-    #katapenting=readFile('katapenting.txt')
-    #contohstring = "aku mau mau mau mau banget tucil"
     arraystring = input.split(' ')
     jenis=None
     for j in arraystring:
@@ -441,10 +311,6 @@ def deadlineKataPenting(input):
             arrayOfDeadline.append(i)
     return arrayOfDeadline
 
-#print(listOfDeadlinesComponent)
-#print(deadlineKataPenting('tubes'))
-
-keyword_perintah=readFile('keyword_perintah.txt')
 def deteksiPerintah(input):
     arraystring = input.split(' ')
     valid=False
@@ -455,7 +321,6 @@ def deteksiPerintah(input):
     return valid
 
 def deteksiKeywords(input):
-    keywordss=readFile('keywords.txt')
     arraystringg = input.split(' ')
     keyword=None
     for j in arraystringg:
@@ -463,18 +328,9 @@ def deteksiKeywords(input):
             keyword=j
     return keyword
 
-#print("IF2211")
-
 def carikmpgak(input,sesuatu):
-    #katapenting=readFile('katapenting.txt')
-    #contohstring = "aku mau mau mau mau banget tucil"
     arraystring = input.split(' ')
-    #print(arraystring)
-
-    #print(arraystring)
-    #contohtext = "tucil"
     jenis=False
-    
     for j in arraystring:
         #print(j)
         #print(sesuatu)
@@ -483,16 +339,10 @@ def carikmpgak(input,sesuatu):
             break
     return jenis
 
-#print(carikmpgak('sesuatu','sesuatu'))
-
 def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
     input = Stopword(input)
     input = input.lower()
-    #print(input)
-    # harus ada topik, harus ada selain stopwords
-    #print(deteksiPerintah(input))
     arraystring=input.split(' ')
-    #print(input)
     tanggal = False
     kode=False
     returnValue=""
@@ -504,9 +354,6 @@ def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
             kode=True
             kodeDibaca=i
     if (deteksiPerintah(input)==False):
-        # Gak ada kata perintah, asumsi dia mau nambahin 
-        #print("INPUT")
-        #print(kode)
         if (kode==True and deteksiKataPenting(input)!=None and deteksiKeywords(input)!=None and tanggal==True):
             #input.split(deteksiKodeKuliah(),3)[2] # Asumsi kalau menggunakan format bulan dengan huruf, hanya pake " "
             tanggal=tanggalDibaca
@@ -514,7 +361,6 @@ def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
             kataPenting=deteksiKataPenting(input)
             topik=deteksiKeywords(input)
             return (addTask(tanggal,kode,kataPenting,topik))
-        # Kalo gaada tanggal, kode, kata penting, ga dikenali
         else:
             return "Maaf, pesan tidak dikenali"
     else: 
@@ -540,5 +386,10 @@ def saveDeadlinesComponent() :
         for line in data:
             txt_file.write(" ".join(line) + "\n")
 
-input = input("Masukkan input: ")
-print(pilihanInput(input))
+listOfDeadlines = readFile('deadline.txt')
+listOfDeadlinesComponent = []
+for i in listOfDeadlines:
+        listOfDeadlinesComponent.append(i.split(" "))
+katapenting=readFile('katapenting.txt')
+keyword_perintah=readFile('keyword_perintah.txt')
+keywordss=readFile('keywords.txt')
