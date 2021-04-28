@@ -281,7 +281,8 @@ def perbaharuiTask(IDdicari,tanggalBaru):
             i[1]=tanggalBaru[0]
             i[2]=tanggalBaru[1]
             i[3]=tanggalBaru[2]
-    return "Selesai"
+            return "List berhasil diperbaharui"
+    return "Gagal, tidak ada ID"
 
 # Menandai sudah
 def deleteTask(IDdicari):
