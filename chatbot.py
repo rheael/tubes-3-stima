@@ -6,8 +6,11 @@ from werkzeug.utils import secure_filename
 import os
 from flask_bootstrap import Bootstrap
 
-global listOfChat
-listOfChat = []
+global listOfChatAll
+
+listOfChatAll = []
+#listOf
+#listOfChat = []
 
 # App config.
 DEBUG = True
@@ -24,18 +27,21 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 def open():
     return render_template('open.html')
 
+
 @app.route('/', methods=['GET', 'POST'])
 def upload_all():
     if request.method == 'POST':
         name = request.form['name']
-        global listOfChat
-        listOfChat.append(name)
+        listOfChat = {}
+        global listOfChatAll
+        listOfChat[0]=name
         x = getChatBotResponse(name)
-        listOfChat.append(x)
-        length = len(listOfChat)
+        listOfChat[1]=x
+        #length = len(listOfChat)
+        listOfChatAll.append(listOfChat)
         #print(name)
         #print(kmpstringmatching(name,"IF2211"))
-        return render_template('showmessage.html',listOfChat=listOfChat)
+        return render_template('showmessage.html',listOfChatAll=listOfChatAll,listOfChat=listOfChat)
 
 def getChatBotResponse(name):
     return pilihanInput(name)

@@ -10,10 +10,14 @@
 <p> - A friendly reminder costumize just for you - </p><br>
 <input type="text" id="name" class="form-control" name="name" placeholder="Input command here" size="40">
 <button type="submit" class="btn btn-success">Submit</button>
-{% for i in listOfChat %}
+{% for i in listOfChatAll %}
 <div class="hasil"><h3 style="background-color: white; padding:10px 10px; margin-left:640px;margin-right:400px">
-    {{ i }}
-</h3></div>
+    {{ i[0] }}
+    </div>
+    <div class="hasil"><h3 style="background-color: white; padding:10px 10px; margin-left:640px;margin-right:400px">
+      {{ i[1] }}
+  </div>
+</h3>
 {% endfor %}
 
 </div></div>
