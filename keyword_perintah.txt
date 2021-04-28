@@ -1,5 +1,6 @@
-bantuan
+fitur
 membantu
+bantu
 kapan
 diundur
 selesai

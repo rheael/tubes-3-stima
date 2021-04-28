@@ -321,6 +321,7 @@ def addTask(tanggal,kode,jenis,topik):
     data_deadline = []
     data_deadline.append((str(tanggal[0]) + " " + str(tanggal[1]) + " " + str(tanggal[2]) + " " + str(kode) + " " + str(jenis) + " " + str(topik)))
     listOfDeadlinesComponent.append(data_deadline)
+    return "Berhasil menambahkan task" + str(listOfDeadlinesComponent)
     #print(listOfDeadlinesComponent)
 
 def tampilkanSeluruhDeadline():
@@ -352,7 +353,10 @@ def tampilkanDeadlines(input):
                         hari = True
                         break
         if (readDate(input)==None and minggu==False and hari==False): # kalo misalnya ga ada tanggal
-            return tampilkanSeluruhDeadline()
+            if(deteksiKataPenting(input)==None):
+                return tampilkanSeluruhDeadline()
+            else:
+                return deadlineKataPenting(input)
         else:
             if(len(readAdaBerapaTanggal(input))==2):
                 x=readAdaBerapaTanggal(input)
@@ -372,6 +376,7 @@ def tampilkanDeadlines(input):
                         if(str(i[0])+" "+str(i[1])+" "+str(i[2]) in x):
                             return output + str(i)
         return "Pesan gagal diproses"
+
 
 
 # Menampilkan deadline suatu task
@@ -421,6 +426,17 @@ def deteksiKataPenting(input):
         if j in katapenting:
             jenis=j
     return jenis
+
+def deadlineKataPenting(input):
+    katapenting = deteksiKataPenting(input)
+    arrayOfDeadline=[]
+    for i in listOfDeadlinesComponent:
+        if(i[4].lower()==katapenting):
+            arrayOfDeadline.append(i)
+    return arrayOfDeadline
+
+#print(listOfDeadlinesComponent)
+#print(deadlineKataPenting('tubes'))
 
 keyword_perintah=readFile('keyword_perintah.txt')
 def deteksiPerintah(input):
@@ -473,6 +489,7 @@ def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
     #print(input)
     tanggal = False
     kode=False
+    returnValue=""
     for i in arraystring:
         if readDate(i)!=None:
             tanggal=True
@@ -490,24 +507,16 @@ def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
             kode=kodeDibaca
             kataPenting=deteksiKataPenting(input)
             topik=deteksiKeywords(input)
-            addTask(tanggal,kode,kataPenting,topik)
+            return (addTask(tanggal,kode,kataPenting,topik))
         # Kalo gaada tanggal, kode, kata penting, ga dikenali
         else:
             return "Maaf, pesan tidak dikenali"
     else: 
-        #print("HALO")
-        #tugas = deteksiKodeKuliah(input)
-        #print(tugas)
-        #tampilkanDeadlines(input)
-        #tampilkanDeadlines(input)
-        #for i in listOfDeadlinesComponent:
-        #    print(i)
-        #print(deteksiKodeKuliah)
-        if(carikmpgak(input,"bantuan")):
-            return help()
+        if(kode!=True and carikmpgak(input,"fitur")):
+           return help()
         elif(carikmpgak(input,"tampilkan")):
             return tampilkanDeadlines(input)
-        elif(deteksiKodeKuliah(input)!=None and carikmpgak(input,"kapan")):
+        elif(kode==True and carikmpgak(input,"kapan")):
             tugas = kodeDibaca
             return tanyakanDeadline(tugas)
         elif(kode==True and carikmpgak(input,"diundur") and tanggal==True):
@@ -517,8 +526,8 @@ def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
         elif(kode==True and carikmpgak(input,"selesai")):
             tugas = kodeDibaca
             return deleteTask(tugas)
-    #print(listOfDeadlinesComponent)
- 
+    return "GAGAL"
+
 def saveDeadlinesComponent() :
     data = listOfDeadlinesComponent
     with open("deadline.txt", "w") as txt_file:
@@ -526,4 +535,4 @@ def saveDeadlinesComponent() :
             txt_file.write(" ".join(line) + "\n")
 
 input = input("Masukkan input: ")
-pilihanInput(input)
+print(pilihanInput(input))
