@@ -249,7 +249,8 @@ def tampilkanDeadlines(input):
             else:
                 if (minggu):
                     if(banyakminggu!=None):
-                        return deadlinesBetween(listOfDeadlines, convert(date.today()), convert(date.today() + timedelta(days=7)))
+                        #return deadlinesBetween(listOfDeadlines, convert(date.today()), convert(date.today() + timedelta(days=7)))
+                        return "Maaf, silakan coba dengan hari"
                 elif (hari):
                     if(banyakhari!=None):
                         return deadlineFromNow(int(banyakhari))
@@ -300,7 +301,7 @@ def deleteTask(IDdicari):
 def help():
     output=""
     katapentingstr = ""
-    listfitur = "1. Menambahkan task baru \r\n- Harus mencakup Kode Mata Kuliah XX9999, \r\nkeyword (string, matching, algoritma, greedy, \r\nbrute, force, branch, bound, dfs, bfs, boyer, moore,\r\nkmp, bm, knuth, morris, pratt), kata penting, tanggal.\r\n2. Melihat daftar task yang harus dikerjakan\r\n- Seluruh task : Keyword: tampilkan\r\n- Berdasarkan periode waktu : \r\n  Di antara dua waktu: Keyword: tampilkan + <dua tanggal>\r\n  Satu hari tertentu: tampilkan + <1 tanggal>\r\n  Dalam beberapa minggu/hari ke depan: Keyword tampilkan + <angka> + minggu / hari\r\n- Berdasarkan jenis task : tampilkan + kata penting\r\n3. Menampilkan deadline dari suatu task tertentu\r\n- Keyword "kapan" + <kode mata kuliah>\r\n4. Memperbaharui task tertentu\r\n- Keyword : <ID> + diundur\r\n5. Menandai bahwa suatu task sudah selesai\r\n- Keyword : <ID> + selesai\r\n6. Menampilkan opsi help\r\n- Keyword : fitur\r\n"
+    listfitur = "1. Menambahkan task baru \r\n- Harus mencakup Kode Mata Kuliah XX9999, \r\nkeyword (string, matching, algoritma, greedy, \r\nbrute, force, branch, bound, dfs, bfs, boyer, moore," + "\r\nkmp, bm, knuth, morris, pratt), kata penting, tanggal.\r\n2. Melihat daftar task yang harus dikerjakan\r\n- Seluruh task : Keyword: tampilkan\r\n- Berdasarkan periode waktu : \r\n  Di antara dua waktu: Keyword: tampilkan + <dua tanggal>\r\n  Satu hari tertentu: tampilkan + <1 tanggal>\r\n  Dalam beberapa hari ke depan: Keyword tampilkan + <angka> / hari\r\n- Berdasarkan jenis task : tampilkan + kata penting\r\n3. Menampilkan deadline dari suatu task tertentu\r\n- Keyword kapan + <kode mata kuliah>\r\n4. Memperbaharui task tertentu\r\n- Keyword : <ID> + diundur\r\n5. Menandai bahwa suatu task sudah selesai\r\n- Keyword : <ID> + selesai\r\n6. Menampilkan opsi help\r\n- Keyword : fitur\r\n"
     for i in katapenting:
         katapentingstr = katapentingstr + str(i) + "\r\n"
     output="[Fitur] " + "\r\n" + listfitur + "\r\n" + "[Daftar kata penting] " + "\r\n" + katapentingstr
