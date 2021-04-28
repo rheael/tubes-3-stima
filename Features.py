@@ -101,7 +101,7 @@ def deadlinesBetween(listOfDeadlines,date1,date2):
             for j in the_days:
                 if(i[0] + " " + i[1] + " " + i[2]==j):
                     #print(j)
-                    deadlinesSemuanya=deadlinesSemuanya + (i) + "\n"
+                    deadlinesSemuanya=deadlinesSemuanya + str(i) + "\n"
                              
         return deadlinesSemuanya  
 
@@ -305,10 +305,10 @@ def readDate(input):
     #    print("Tidak ada tanggal terdeteksi\n")
     # kalo len tanggal 2, artinya harus cari deadline antara 2 tanggal, artinya diproses juga tanggal[1], wkwk.
 
-#print(readDate('23 05 2020'))
+#print(readDate('23/05/2020'))
 
 def deteksiKodeKuliah(input):
-    z = re.findall(re.compile("[a-z]+[a-z]+[0-9]+[0-9]+[0-9]+[0-9]"),input)
+    z = re.findall(re.compile("[a-z|A-Z]+[a-z|A-Z]+[0-9]+[0-9]+[0-9]+[0-9]"),input)
     if(len(z)>0):
         return z[0]
     else:
@@ -316,19 +316,21 @@ def deteksiKodeKuliah(input):
 
 # Menambahkan task baru
 def addTask(tanggal,kode,jenis,topik):
+    #print(listOfDeadlinesComponent)
     tanggal = tanggal.split(" ")
-    data_deadline = (str(tanggal[0]) + " " + str(tanggal[1]) + " " + str(tanggal[2]) + " " + str(kode) + " " + str(jenis) + " " + str(topik) + "\n")
+    data_deadline = []
+    data_deadline.append((str(tanggal[0]) + " " + str(tanggal[1]) + " " + str(tanggal[2]) + " " + str(kode) + " " + str(jenis) + " " + str(topik)))
     listOfDeadlinesComponent.append(data_deadline)
-    #with open('tugas.txt', 'a+') as f:
-    #    f.write(data_deadline)
+    #print(listOfDeadlinesComponent)
 
 def tampilkanSeluruhDeadline():
     deadline = ""
     for i in listOfDeadlinesComponent:
-        print(i)
+        #print(i)
         deadline=deadline + str(i) + "\n"
     return deadline
     
+# kata penting
 def tampilkanDeadlines(input):
         arraystring = input.split(' ')
         minggu = False
@@ -367,7 +369,7 @@ def tampilkanDeadlines(input):
                     for i in listOfDeadlinesComponent:
                         y=readDate(input)
                         x=readAdaBerapaTanggal(y)
-                        if(i[0]+" "+i[1]+" "+i[2] in x):
+                        if(str(i[0])+" "+str(i[1])+" "+str(i[2]) in x):
                             return output + str(i)
         return "Pesan gagal diproses"
 
@@ -439,6 +441,8 @@ def deteksiKeywords(input):
             keyword=j
     return keyword
 
+#print("IF2211")
+
 def carikmpgak(input,sesuatu):
     #katapenting=readFile('katapenting.txt')
     #contohstring = "aku mau mau mau mau banget tucil"
@@ -461,23 +465,37 @@ def carikmpgak(input,sesuatu):
 
 def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
     input = Stopword(input)
+    input = input.lower()
     #print(input)
     # harus ada topik, harus ada selain stopwords
     #print(deteksiPerintah(input))
+    arraystring=input.split(' ')
+    #print(input)
+    tanggal = False
+    kode=False
+    for i in arraystring:
+        if readDate(i)!=None:
+            tanggal=True
+            tanggalDibaca=readDate(i)
+        if deteksiKodeKuliah(i)!=None:
+            kode=True
+            kodeDibaca=i
     if (deteksiPerintah(input)==False):
         # Gak ada kata perintah, asumsi dia mau nambahin 
-        if (readDate(input)!=None and deteksiKodeKuliah(input)!=None and deteksiKataPenting(input)!=None):
-            ### TAMBAHKAN TASK
-            #input = input.split(readDate(input),2)[1]
-            #input = input.split(deteksiKataPenting(input),2)[1]
-            #input = input.split(deteksiKodeKuliah(input),2)[1]
-            print(input)
-            # Asumsi kalau menggunakan format bulan dengan huruf, hanya pake " "
-            #addTask(readDate(input), deteksiKodeKuliah(input), deteksiKataPenting(input), "hoho")
+        #print("INPUT")
+        #print(kode)
+        if (kode==True and deteksiKataPenting(input)!=None and deteksiKeywords(input)!=None and tanggal==True):
+            #input.split(deteksiKodeKuliah(),3)[2] # Asumsi kalau menggunakan format bulan dengan huruf, hanya pake " "
+            tanggal=tanggalDibaca
+            kode=kodeDibaca
+            kataPenting=deteksiKataPenting(input)
+            topik=deteksiKeywords(input)
+            addTask(tanggal,kode,kataPenting,topik)
         # Kalo gaada tanggal, kode, kata penting, ga dikenali
         else:
             return "Maaf, pesan tidak dikenali"
     else: 
+        #print("HALO")
         #tugas = deteksiKodeKuliah(input)
         #print(tugas)
         #tampilkanDeadlines(input)
@@ -485,22 +503,21 @@ def pilihanInput(input): # Masuk ke fitur sesuai masukan pengguna
         #for i in listOfDeadlinesComponent:
         #    print(i)
         #print(deteksiKodeKuliah)
-        if(carikmpgak(input,"bantu")):
+        if(carikmpgak(input,"bantuan")):
             return help()
-        elif(carikmpgak(input,"tampil")):
+        elif(carikmpgak(input,"tampilkan")):
             return tampilkanDeadlines(input)
         elif(deteksiKodeKuliah(input)!=None and carikmpgak(input,"kapan")):
-            tugas = deteksiKodeKuliah(input)
+            tugas = kodeDibaca
             return tanyakanDeadline(tugas)
-        elif(deteksiKodeKuliah(input)!=None and carikmpgak(input,"undur") and readDate(input)!=None):
-            tanggalBaru = readDate(input)
-            tugas = deteksiKodeKuliah(input)
+        elif(kode==True and carikmpgak(input,"diundur") and tanggal==True):
+            tanggalBaru = tanggalDibaca
+            tugas = kodeDibaca
             return perbaharuiTask(tugas,tanggalBaru)
-        elif(deteksiKodeKuliah(input)!=None and carikmpgak(input,"selesai")):
-            tugas = deteksiKodeKuliah(input)
+        elif(kode==True and carikmpgak(input,"selesai")):
+            tugas = kodeDibaca
             return deleteTask(tugas)
-           
-    print(listOfDeadlinesComponent)
+    #print(listOfDeadlinesComponent)
  
 def saveDeadlinesComponent() :
     data = listOfDeadlinesComponent
