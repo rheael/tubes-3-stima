@@ -1,6 +1,7 @@
 from flask import Flask, render_template, flash, request, redirect
 from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
 #from kmpstringmatching import kmpstringmatching
+from Features import *
 from werkzeug.utils import secure_filename
 import os
 from flask_bootstrap import Bootstrap
@@ -29,15 +30,15 @@ def upload_all():
         name = request.form['name']
         global listOfChat
         listOfChat.append(name)
-        x = getChatBotResponse()
+        x = getChatBotResponse(name)
         listOfChat.append(x)
         length = len(listOfChat)
         #print(name)
         #print(kmpstringmatching(name,"IF2211"))
         return render_template('showmessage.html',listOfChat=listOfChat)
 
-def getChatBotResponse():
-    return "Contoh"
+def getChatBotResponse(name):
+    return pilihanInput(name)
 
 if __name__ == "__main__":
     app.run(threaded=True)
