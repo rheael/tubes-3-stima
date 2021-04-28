@@ -412,9 +412,15 @@ def deleteTask(tugas):
     return "Pesan gagal"
 
 # Menampilkan opsi help
-def help():
+def help(katapenting):
     output=""
-    output="Fitur"+"\n"+"Daftar kata penting"
+    katapentingstr = ""
+    listfitur = " 1. Menambahkan task baru [#katakunci] \r\n 2. Melihat daftar task yang harus dikerjakan [#katakunci] \r\n 3. Menampilkan deadline dari suatu task tertentu [#katakunci]\r\n 4. Memperbaharui task tertentu [#katakunci]\r\n 5. Menandai suatu task sudah selesai [#katakunci] \r\n 6. Menampilkan opsi help [katakunci]\r\n "
+    for i in katapenting:
+        katapentingstr = katapentingstr + str(i) + "\r\n"
+    output="[Fitur] " + "\r\n" + listfitur + "\r\n" + "[Daftar kata penting] " + "\r\n" + katapentingstr
+    return output
+    #print(katapenting) 
 
 katapenting=readFile('katapenting.txt')
 def deteksiKataPenting(input):
