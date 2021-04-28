@@ -4,7 +4,7 @@ from wtforms import Form, TextField, TextAreaField, validators, StringField, Sub
 from Features import *
 from werkzeug.utils import secure_filename
 import os
-from flask_bootstrap import Bootstrap
+#from flask_bootstrap import Bootstrap
 
 global listOfChatAll
 

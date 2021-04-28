@@ -10,3 +10,10 @@ L0014 22 07 2020 if2230 tubes string
 L0015 22 07 2020 if2230 tubes string
 L0012 22 07 2020 if2230 tubes string
 L0013 22 07 2020 if2230 tubes string
+L0013 27 04 2020 if2230 tucil string
+L0014 22 06 2020 if2240 tubes string
+L0015 22 06 2020 if2240 tubes string
+L0016 14 04 2021 if2211 tubes string
+L0017 14 04 2021 if2211 tubes string
+L0018 12 04 2021 if2211 tubes bfs
+L0019 01 05 2021 if2210 tubes string
