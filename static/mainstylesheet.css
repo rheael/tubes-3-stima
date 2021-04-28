@@ -1,8 +1,9 @@
 body{
   text-align: center;
   background-image: url("IMG_2263.jpg");
-  background-size: 1280px 680px;
+  background-size: cover;
   background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 h2{
   margin-top: 40px;
